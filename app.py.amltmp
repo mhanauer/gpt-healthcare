@@ -1,33 +1,48 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
 # Load environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set your OpenAI API key
-openai.api_key = api_key
+client = OpenAI(api_key)
 
 def generate_response(user_input):
     # Define the additional context and prompt engineering
-    context = (
+    system_content = (
         "You should answer all questions in the context of payors and providers. "
         "Additionally, when someone mentions denials, you should also mention that they check out the Mede Denial Dashboards."
     )
 
     # Combine the user input with the context
     messages = [
-        {"role": "system", "content": context},
-        {"role": "user", "content": user_input}
+        {
+            "role": "system",
+            "content": [
+                {
+                    "text": system_content,
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "role": "user",
+            "content": user_input
+        }
     ]
 
     # Call the OpenAI API to generate a response
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=messages,
-        max_tokens=150
+        temperature=1,
+        max_tokens=2425,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
     )
 
-    return response.choices[0].message['content'].strip()
+    return response['choices'][0]['message']['content'].strip()
 
 # Streamlit application
 st.title("Healthcare Support Chatbot")

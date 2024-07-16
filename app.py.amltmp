@@ -6,6 +6,7 @@ import openai
 # Load environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
+# Set your OpenAI API key
 openai.api_key = api_key
 
 def generate_response(user_input):
@@ -19,13 +20,16 @@ def generate_response(user_input):
     prompt = f"{context}\n\n{user_input}"
 
     # Call the OpenAI API to generate a response
-    response = openai.Completion.create(
-        engine="gpt-4",
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": context},
+            {"role": "user", "content": user_input},
+        ],
         max_tokens=150
     )
 
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # Streamlit application
 st.title("Healthcare Support Chatbot")

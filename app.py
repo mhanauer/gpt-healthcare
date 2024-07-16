@@ -1,8 +1,6 @@
 import streamlit as st
 import openai
 
-# Set your OpenAI API key
-
 # Load environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -17,15 +15,15 @@ def generate_response(user_input):
     )
 
     # Combine the user input with the context
-    prompt = f"{context}\n\n{user_input}"
+    messages = [
+        {"role": "system", "content": context},
+        {"role": "user", "content": user_input}
+    ]
 
     # Call the OpenAI API to generate a response
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": context},
-            {"role": "user", "content": user_input},
-        ],
+        model="gpt-4",
+        messages=messages,
         max_tokens=150
     )
 

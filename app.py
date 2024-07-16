@@ -1,11 +1,11 @@
 import streamlit as st
-from openai import OpenAI
+import openai
 
 # Load environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set your OpenAI API key
-client = OpenAI(api_key)
+openai.api_key = api_key
 
 def generate_response(user_input):
     # Define the additional context and prompt engineering
@@ -18,12 +18,7 @@ def generate_response(user_input):
     messages = [
         {
             "role": "system",
-            "content": [
-                {
-                    "text": system_content,
-                    "type": "text"
-                }
-            ]
+            "content": system_content
         },
         {
             "role": "user",
@@ -32,7 +27,7 @@ def generate_response(user_input):
     ]
 
     # Call the OpenAI API to generate a response
-    response = client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=messages,
         temperature=1,

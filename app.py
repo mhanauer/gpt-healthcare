@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
-# Generate synthetic data
+# Generate synthetic data with noise
 np.random.seed(42)
 dates = pd.date_range(start='2023-01-01', periods=24, freq='M')
-denials = np.cumsum(np.random.normal(loc=5, scale=2, size=len(dates)))
-cash_collections = np.cumsum(np.random.normal(loc=-5, scale=2, size=len(dates)))
+denials = np.cumsum(np.random.normal(loc=5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
+cash_collections = np.cumsum(np.random.normal(loc=-5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
 
 # Convert to percentages
 denials = (denials - denials.min()) / (denials.max() - denials.min()) * 100

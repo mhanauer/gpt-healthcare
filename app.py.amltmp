@@ -49,7 +49,7 @@ client = OpenAI(api_key=api_key)
 def generate_response(user_input):
     # Define the additional context and prompt engineering
     messages = [
-        {"role": "system", "content": "You support revenue cycle management customers in making data based decisions."},
+        {"role": "system", "content": "You support revenue cycle management customers in making data based decisions.  Try to give specific tips"},
         {"role": "user", "content": user_input}
     ]
 

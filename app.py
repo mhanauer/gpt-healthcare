@@ -10,12 +10,14 @@ dates = pd.date_range(start='2023-01-01', periods=24, freq='M')
 denials = np.cumsum(np.random.normal(loc=5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
 cash_collections = np.cumsum(np.random.normal(loc=-5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
 
-# Normalize data to range between 40% and 70%
-def normalize(data, lower, upper):
-    return lower + (upper - lower) * (data - data.min()) / (data.max() - data.min())
+# Normalize data to specified ranges
+def normalize(data, start_value, lower, upper):
+    normalized_data = lower + (upper - lower) * (data - data.min()) / (data.max() - data.min())
+    normalized_data[0] = start_value  # Set the start value
+    return np.round(normalized_data)
 
-denials = normalize(denials, 40, 70)
-cash_collections = normalize(cash_collections, 40, 70)
+denials = normalize(denials, 40, 40, 70)
+cash_collections = normalize(cash_collections, 50, 40, 70)
 
 # Create a DataFrame
 data = pd.DataFrame({'Date': dates, 'Denials (%)': denials, 'Cash Collections (%)': cash_collections})
@@ -44,9 +46,9 @@ st.plotly_chart(fig)
 
 # Generate a summary of the data
 data_summary = (
-    f"The data shows the following trends: Denials have varied between {denials.min():.2f}% and {denials.max():.2f}% over the period, "
+    f"The data shows the following trends: Denials have varied between {denials.min():.0f}% and {denials.max():.0f}% over the period, "
     f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between "
-    f"{cash_collections.min():.2f}% and {cash_collections.max():.2f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
+    f"{cash_collections.min():.0f}% and {cash_collections.max():.0f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
 )
 
 st.write("**Data Summary:**")

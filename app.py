@@ -22,6 +22,12 @@ cash_collections = normalize(cash_collections, 50, 40, 70)
 # Create a DataFrame
 data = pd.DataFrame({'Date': dates, 'Denials (%)': denials, 'Cash Collections (%)': cash_collections})
 
+# Find dates of min and max values
+denials_min_date = data['Date'][data['Denials (%)'].idxmin()].strftime('%Y-%m-%d')
+denials_max_date = data['Date'][data['Denials (%)'].idxmax()].strftime('%Y-%m-%d')
+cash_collections_min_date = data['Date'][data['Cash Collections (%)'].idxmin()].strftime('%Y-%m-%d')
+cash_collections_max_date = data['Date'][data['Cash Collections (%)'].idxmax()].strftime('%Y-%m-%d')
+
 # Plotting with Plotly
 fig = go.Figure()
 
@@ -47,8 +53,9 @@ st.plotly_chart(fig)
 # Generate a summary of the data
 data_summary = (
     f"The data shows the following trends: Denials have varied between {denials.min():.0f}% and {denials.max():.0f}% over the period, "
-    f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between "
-    f"{cash_collections.min():.0f}% and {cash_collections.max():.0f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
+    f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. The minimum denial percentage occurred on {denials_min_date}, and the maximum denial percentage occurred on {denials_max_date}. "
+    f"Cash collections have varied between {cash_collections.min():.0f}% and {cash_collections.max():.0f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}. "
+    f"The minimum cash collections percentage occurred on {cash_collections_min_date}, and the maximum cash collections percentage occurred on {cash_collections_max_date}."
 )
 
 st.write("**Data Summary:**")

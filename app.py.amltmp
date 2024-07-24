@@ -10,9 +10,12 @@ dates = pd.date_range(start='2023-01-01', periods=24, freq='M')
 denials = np.cumsum(np.random.normal(loc=5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
 cash_collections = np.cumsum(np.random.normal(loc=-5, scale=2, size=len(dates))) + np.random.normal(scale=5, size=len(dates))
 
-# Convert to percentages
-denials = (denials - denials.min()) / (denials.max() - denials.min()) * 100
-cash_collections = (cash_collections - cash_collections.min()) / (cash_collections.max() - cash_collections.min()) * 100
+# Normalize data to range between 40% and 70%
+def normalize(data, lower, upper):
+    return lower + (upper - lower) * (data - data.min()) / (data.max() - data.min())
+
+denials = normalize(denials, 40, 70)
+cash_collections = normalize(cash_collections, 40, 70)
 
 # Create a DataFrame
 data = pd.DataFrame({'Date': dates, 'Denials (%)': denials, 'Cash Collections (%)': cash_collections})

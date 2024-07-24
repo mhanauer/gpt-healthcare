@@ -54,7 +54,7 @@ def generate_response(user_input):
     )
     
     messages = [
-        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Try to give specific tips and discuss the summary results."},
+        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Try to give specific tips, discuss the summary results provided, and limit the tips to five."},
         {"role": "user", "content": user_input},
         {"role": "assistant", "content": data_summary}
     ]
@@ -64,7 +64,7 @@ def generate_response(user_input):
         model="gpt-4",
         messages=messages,
         temperature=0.7,
-        max_tokens=250,
+        max_tokens=300,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0

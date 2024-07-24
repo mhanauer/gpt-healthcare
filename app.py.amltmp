@@ -54,7 +54,7 @@ def generate_response(user_input):
     )
     
     messages = [
-        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Try to give specific tips, discuss the summary results provided, and limit the tips to five."},
+        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Before answering the prompt, provide a written summary of the data based on the summary data provided. Then give specific tips and limit the tips to five."},
         {"role": "user", "content": user_input},
         {"role": "assistant", "content": data_summary}
     ]

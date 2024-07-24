@@ -39,6 +39,16 @@ fig.update_layout(
 st.title("Trends in KPIs over time")
 st.plotly_chart(fig)
 
+# Generate a summary of the data
+data_summary = (
+    f"The data shows the following trends: Denials have varied between {denials.min():.2f}% and {denials.max():.2f}% over the period, "
+    f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between "
+    f"{cash_collections.min():.2f}% and {cash_collections.max():.2f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
+)
+
+st.write("**Data Summary:**")
+st.write(data_summary)
+
 # Load environment variables
 api_key = st.secrets["OPENAI_API_KEY"]
 
@@ -46,17 +56,9 @@ api_key = st.secrets["OPENAI_API_KEY"]
 client = OpenAI(api_key=api_key)
 
 def generate_response(user_input):
-    # Define the additional context and prompt engineering
-    data_summary = (
-        f"The data shows the following trends: Denials have varied between {denials.min():.2f}% and {denials.max():.2f}% over the period, "
-        f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between "
-        f"{cash_collections.min():.2f}% and {cash_collections.max():.2f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
-    )
-    
     messages = [
         {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Before answering the prompt, provide a written summary of the data based on the summary data provided. Then give specific tips and limit the tips to five."},
-        {"role": "user", "content": user_input},
-        {"role": "assistant", "content": data_summary}
+        {"role": "user", "content": user_input}
     ]
 
     # Call the OpenAI API to generate a response

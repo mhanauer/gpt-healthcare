@@ -47,10 +47,14 @@ client = OpenAI(api_key=api_key)
 
 def generate_response(user_input):
     # Define the additional context and prompt engineering
-    data_summary = f"The data shows the following trends: Denials have varied between {denials.min():.2f}% and {denials.max():.2f}% over the period, showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between {cash_collections.min():.2f}% and {cash_collections.max():.2f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
+    data_summary = (
+        f"The data shows the following trends: Denials have varied between {denials.min():.2f}% and {denials.max():.2f}% over the period, "
+        f"showing a general trend of {'increase' if denials[-1] > denials[0] else 'decrease'}. Cash collections have varied between "
+        f"{cash_collections.min():.2f}% and {cash_collections.max():.2f}%, showing a general trend of {'increase' if cash_collections[-1] > cash_collections[0] else 'decrease'}."
+    )
     
     messages = [
-        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Try to give specific tips."},
+        {"role": "system", "content": "You support revenue cycle management customers in making data-based decisions. Try to give specific tips and discuss the summary results."},
         {"role": "user", "content": user_input},
         {"role": "assistant", "content": data_summary}
     ]
